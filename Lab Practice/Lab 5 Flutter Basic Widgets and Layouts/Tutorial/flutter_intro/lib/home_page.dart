@@ -11,15 +11,18 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: Text(
-                "CMPS 312",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                  backgroundColor: Colors.yellow,
+            Padding(
+              padding: EdgeInsets.only(top: 50),
+              child: Center(
+                child: Text(
+                  "CMPS 312",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                    decoration: TextDecoration.none,
+                    backgroundColor: Colors.yellow,
+                  ),
                 ),
               ),
             ),
