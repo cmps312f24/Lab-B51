@@ -6,12 +6,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.purpleAccent,
-      child: const SafeArea(
+      color: Colors.brown[400],
+      child: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 50),
               child: Center(
                 child: Text(
@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(bottom: 50.0),
               child: Center(
                 child: Text(
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
             // SizedBox(
             //   height: 50,
             // ),
-            Center(
+            const Center(
               child: Text(
                 "Ali",
                 textAlign: TextAlign.center,
@@ -55,6 +55,15 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
+            const Icon(
+              Icons.person,
+              size: 60,
+              color: Colors.white,
+            ),
+
+            Image.asset("images/happy_cat.jpg")
+            // Image.network(
+            //     "https://static.vecteezy.com/system/resources/thumbnails/029/554/988/small_2x/surprised-cat-scottish-isolated-on-white-background-generative-ai-photo.jpg"),
           ],
         ),
       ),
