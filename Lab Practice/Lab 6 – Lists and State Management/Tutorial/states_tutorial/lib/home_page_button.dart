@@ -9,7 +9,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var theInputText = 'Something';
-  final _textFieldController = TextEditingController();
+  final _textFieldController1 = TextEditingController();
+  final _textFieldController2 = TextEditingController();
+  var result = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,19 @@ class _MyHomePageState extends State<MyHomePage> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: TextField(
-              controller: _textFieldController,
+              controller: _textFieldController1,
+              decoration: InputDecoration(
+                // suffixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: TextField(
+              controller: _textFieldController2,
               decoration: InputDecoration(
                 // suffixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
@@ -36,14 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ElevatedButton(
             onPressed: () {
               setState(() {
-                theInputText = _textFieldController.text;
-                _textFieldController.clear();
+                result = double.parse(_textFieldController1.text) +
+                    double.parse(_textFieldController2.text);
               });
             },
             child: const Icon(Icons.shape_line),
           ),
           Text(
-            theInputText,
+            result.toString(),
             style: const TextStyle(fontSize: 20),
           ),
         ],

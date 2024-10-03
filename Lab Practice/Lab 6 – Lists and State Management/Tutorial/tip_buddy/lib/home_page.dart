@@ -9,9 +9,19 @@ class TipCalculator extends StatefulWidget {
 
 class _TipCalculatorState extends State<TipCalculator> {
   final TextEditingController _controller = TextEditingController();
-  final int _tipPercentage = 0;
+  var _tipPercentage = 10;
+  var _roundUp = false;
+  var _billAmount = 0.0;
 
   final tips = [10, 20, 30];
+
+  double getBBillAmount() {
+    var tipAmount = _billAmount * _tipPercentage / 100;
+    if (_roundUp) {
+      tipAmount = tipAmount.ceilToDouble();
+    }
+    return tipAmount;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +41,11 @@ class _TipCalculatorState extends State<TipCalculator> {
           const SizedBox(height: 20),
           TextField(
             controller: _controller,
-            onChanged: _calculateTip,
+            onChanged: (value) {
+              setState(() {
+                _billAmount = double.parse(value);
+              });
+            },
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Bill amount',
@@ -50,17 +64,20 @@ class _TipCalculatorState extends State<TipCalculator> {
             ),
           ),
           const Divider(thickness: 5),
-          ...tips.map((tip) => RadioListTile<int>(
-                title: Text("$tip%"),
-                value: tip,
-                groupValue: _tipPercentage,
+          for (var tip in tips)
+            RadioListTile<int>(
+              title: Text("$tip %"),
+              value: tip,
+              groupValue: _tipPercentage,
 
-                //if the value == groupValue then the radio button is selected
+              //if the value == groupValue then the radio button is selected
 
-                onChanged: (value) {
-                  // TODO: Implement the on Changed method
-                },
-              )),
+              onChanged: (value) {
+                setState(() {
+                  _tipPercentage = value!;
+                });
+              },
+            ),
           Row(
             children: [
               const SizedBox(width: 20),
@@ -70,9 +87,11 @@ class _TipCalculatorState extends State<TipCalculator> {
               ),
               const SizedBox(width: 10),
               Switch(
-                value: true,
+                value: _roundUp,
                 onChanged: (bool value) {
-                  // TODO: Implement this method
+                  setState(() {
+                    _roundUp = value;
+                  });
                 },
               ),
             ],
@@ -80,24 +99,16 @@ class _TipCalculatorState extends State<TipCalculator> {
           const SizedBox(
             height: 20,
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              elevation: 5,
-              minimumSize: const Size(200, 50),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-            ),
-            onPressed: () {},
+          Container(
+            color: Colors.red,
             child: GestureDetector(
               onTap: () {},
-              child: const SizedBox(
+              child: SizedBox(
                 height: 80,
                 child: Center(
                   child: Text(
-                    'Total Tip is \$0.00',
-                    style: TextStyle(
+                    'Total Tip Amount : ${getBBillAmount()}',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -109,6 +120,7 @@ class _TipCalculatorState extends State<TipCalculator> {
               ),
             ),
           ),
+          const SizedBox(height: 30),
         ],
       ),
     );
