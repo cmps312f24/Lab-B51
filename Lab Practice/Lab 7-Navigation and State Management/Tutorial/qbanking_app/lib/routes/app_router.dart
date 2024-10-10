@@ -4,6 +4,7 @@ import 'package:qbanking_app/screens/deposit_screen.dart';
 import 'package:qbanking_app/screens/home_screen.dart';
 import 'package:qbanking_app/screens/new_transfer_screen.dart';
 import 'package:qbanking_app/screens/shell_screen.dart';
+import 'package:qbanking_app/screens/transactions_screen.dart';
 import 'package:qbanking_app/screens/transfer_screen.dart';
 
 class AppRouter {
@@ -47,7 +48,7 @@ class AppRouter {
               GoRoute(
                 name: transaction.name,
                 path: transaction.path,
-                builder: (context, state) => const TransferScreen(),
+                builder: (context, state) => const TransactionsScreen(),
               ),
               GoRoute(
                 name: withdraw.name,
