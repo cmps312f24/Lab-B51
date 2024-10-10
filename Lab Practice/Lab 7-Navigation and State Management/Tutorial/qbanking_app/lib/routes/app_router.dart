@@ -3,6 +3,7 @@ import 'package:qbanking_app/screens/account_screen.dart';
 import 'package:qbanking_app/screens/deposit_screen.dart';
 import 'package:qbanking_app/screens/home_screen.dart';
 import 'package:qbanking_app/screens/new_transfer_screen.dart';
+import 'package:qbanking_app/screens/shell_screen.dart';
 import 'package:qbanking_app/screens/transfer_screen.dart';
 
 class AppRouter {
@@ -20,55 +21,67 @@ class AppRouter {
   static final router = GoRouter(
     initialLocation: home.path,
     routes: [
-      GoRoute(
-        name: home.name,
-        path: home.path,
-        builder: (context, state) => const HomeScreen(),
+      ShellRoute(
         routes: [
           GoRoute(
-            name: account.name,
-            path: account.path,
-            builder: (context, state) => const AccountScreen(),
-          ),
-          GoRoute(
-              name: transfer.name,
-              path: transfer.path,
-              builder: (context, state) => const TransferScreen(),
-              routes: [
-                GoRoute(
-                  name: newTransfer.name,
-                  path: newTransfer.path,
-                  builder: (context, state) => const NewTransferScreen(),
-                ),
-              ]),
-          GoRoute(
-            name: transaction.name,
-            path: transaction.path,
-            builder: (context, state) => const TransferScreen(),
-          ),
-          GoRoute(
-            name: withdraw.name,
-            path: withdraw.path,
-            builder: (context, state) {
-              final accountNo = state.pathParameters['accountNo'];
-              return DepositScreen(accountNo: accountNo!);
-            },
-          ),
-          GoRoute(
-            name: deposit.name,
-            path: deposit.path,
-            builder: (context, state) {
-              final accountNo = state.pathParameters['accountNo'];
-              return DepositScreen(accountNo: accountNo!);
-            },
+            name: home.name,
+            path: home.path,
+            builder: (context, state) => const HomeScreen(),
+            routes: [
+              GoRoute(
+                name: account.name,
+                path: account.path,
+                builder: (context, state) => const AccountScreen(),
+              ),
+              GoRoute(
+                  name: transfer.name,
+                  path: transfer.path,
+                  builder: (context, state) => const TransferScreen(),
+                  routes: [
+                    GoRoute(
+                      name: newTransfer.name,
+                      path: newTransfer.path,
+                      builder: (context, state) => const NewTransferScreen(),
+                    ),
+                  ]),
+              GoRoute(
+                name: transaction.name,
+                path: transaction.path,
+                builder: (context, state) => const TransferScreen(),
+              ),
+              GoRoute(
+                name: withdraw.name,
+                path: withdraw.path,
+                builder: (context, state) {
+                  final accountNo = state.pathParameters['accountNo'];
+                  return DepositScreen(accountNo: accountNo!);
+                },
+              ),
+              GoRoute(
+                name: deposit.name,
+                path: deposit.path,
+                builder: (context, state) {
+                  final accountNo = state.pathParameters['accountNo'];
+                  return DepositScreen(accountNo: accountNo!);
+                },
+              ),
+            ],
           ),
         ],
-      ),
+        builder: (context, state, child) => ShellScreen(child: child),
+      )
     ],
   );
 }
 
 // context.go('/');
+
+/*
+  ShellRoute(
+    routes: [all routes that should have the common shell],
+    builder: (context, state , child) => ShellScreen(child: child),
+  )
+*/
 
 
 
