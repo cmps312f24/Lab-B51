@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:qbanking_app/providers/transfer_provider.dart';
+import 'package:qbanking_app/routes/app_router.dart';
+import 'package:qbanking_app/screens/shell_screen.dart';
 
-class TransferScreen extends StatefulWidget {
+class TransferScreen extends ConsumerStatefulWidget {
   const TransferScreen({super.key});
 
   @override
-  State<TransferScreen> createState() => _TransferScreenState();
+  ConsumerState<TransferScreen> createState() => _TransferScreenState();
 }
 
-class _TransferScreenState extends State<TransferScreen> {
+class _TransferScreenState extends ConsumerState<TransferScreen> {
   @override
   Widget build(BuildContext context) {
-    var transfers = [];
+    var transfers = ref.watch(transferNotifierProvider);
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: ElevatedButton(
               onPressed: () {
-                //todo navigate to the  new transfer
+                context.pushNamed(AppRouter.newTransfer.name);
               },
               iconAlignment: IconAlignment.start,
               child: const Text('New Transfer')),

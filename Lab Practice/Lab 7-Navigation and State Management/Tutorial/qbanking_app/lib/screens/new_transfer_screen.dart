@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:qbanking_app/model/transfer.dart';
-
+import 'package:qbanking_app/providers/account_provider.dart';
+import 'package:qbanking_app/providers/beneficiary_provider.dart';
+import 'package:qbanking_app/providers/transfer_provider.dart';
 
 class NewTransferScreen extends ConsumerStatefulWidget {
   const NewTransferScreen({super.key});
@@ -18,10 +21,10 @@ class _NewTransferScreenState extends ConsumerState<NewTransferScreen> {
   @override
   Widget build(BuildContext context) {
     //  get the accounts and beneficiaries from the providers
-    var accounts;
-    var beneficiaries;
+    var accounts = ref.watch(accountNotifierProvider);
+    var beneficiaries = ref.watch(beneficiaryNotifierProvider);
 
-    _selectedAccount = accounts[0].accountNo!;
+    _selectedAccount = accounts[0].accountNo;
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
@@ -138,6 +141,10 @@ class _NewTransferScreenState extends ConsumerState<NewTransferScreen> {
 
                           // update the transfer list
                           // navigate to the transfers screen
+                          ref
+                              .read(transferNotifierProvider.notifier)
+                              .addTransfer(newTransfer);
+                          context.pop();
                         },
                         iconAlignment: IconAlignment.start,
                         child: const Text('Transfer')),
