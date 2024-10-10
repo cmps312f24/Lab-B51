@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qbanking_app/routes/app_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,23 +12,23 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       'label': 'Withdraw',
       'icon': Icons.account_balance,
-      // 'route': AppRouter.account.name,
+      'route': AppRouter.account.name,
     },
     {
       'label': 'Deposits',
       'icon': Icons.account_balance_wallet,
-      // 'route': AppRouter.deposit.name,
+      'route': AppRouter.deposit.name,
       'params': {'accountNo': '123456'},
     },
     {
       'label': 'Transfers',
       'icon': Icons.transfer_within_a_station,
-      // 'route': AppRouter.transfer.name,
+      'route': AppRouter.transfer.name,
     },
     {
       'label': 'Transactions',
       'icon': Icons.account_balance_wallet,
-      // 'route': AppRouter.transactions.name,
+      'route': AppRouter.transaction.name,
     },
   ];
   @override
