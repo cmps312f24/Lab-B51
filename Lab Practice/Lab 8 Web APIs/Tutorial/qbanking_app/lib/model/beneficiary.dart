@@ -17,4 +17,12 @@ class Beneficiary {
       cid: map['cid'] ?? 10001,
     );
   }
+  //toJSON
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'accountNo': accountNo,
+      'cid': cid,
+    };
+  }
 }

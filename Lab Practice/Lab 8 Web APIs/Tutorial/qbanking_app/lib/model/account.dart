@@ -24,4 +24,14 @@ class Account {
       cid: map['cid'] ?? 10001,
     );
   }
+
+  // Method to convert an Account object to a map
+  Map<String, dynamic> toMap() {
+    return {
+      'accountNo': accountNo,
+      'type': type,
+      'balance': balance,
+      'cid': cid,
+    };
+  }
 }
