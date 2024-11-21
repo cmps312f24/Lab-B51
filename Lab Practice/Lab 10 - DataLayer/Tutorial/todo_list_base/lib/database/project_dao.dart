@@ -9,14 +9,17 @@ abstract class ProjectDao {
   Stream<List<Project>> observeProjects();
 
   @Query('SELECT * FROM projects WHERE id = :id')
-  Future<Project> getProject(int id);
+  Future<Project?> getProject(int id);
 
   @insert
-  Future<List<Project>> addProject(Project project);
+  Future<void> addProject(Project project);
 
   @update
-  Future<List<Project>> updateProject(Project updatedProject);
+  Future<void> updateProject(Project updatedProject);
 
   @delete
-  Future<List<Project>> deleteProject(Project project);
+  Future<void> deleteProject(Project project);
+
+  @Query('SELECT * FROM ProjectTodoStatusCounts WHERE pid = :pid')
+  Stream<List<ProjectTodoStatusCounts>> observeProjectTodoStatusCounts(int pid);
 }
