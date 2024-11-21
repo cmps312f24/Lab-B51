@@ -6,10 +6,11 @@ import 'package:todo_list_base/model/project.dart';
   tableName: 'todos',
   foreignKeys: [
     ForeignKey(
-      childColumns: ['pid'],
-      parentColumns: ['id'],
-      entity: Project,
-    ),
+        childColumns: ['pid'],
+        parentColumns: ['id'],
+        entity: Project,
+        onDelete: ForeignKeyAction.cascade,
+        onUpdate: ForeignKeyAction.cascade),
   ],
 )
 class Todo {
