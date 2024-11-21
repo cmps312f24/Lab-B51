@@ -2,7 +2,7 @@ import 'package:floor/floor.dart';
 
 // Todo : add the @entity annotation
 
-@entity
+@Entity(tableName: 'projects')
 class Project {
 // Todo add the @PrimaryKey annotation with autoGenerate: true
 

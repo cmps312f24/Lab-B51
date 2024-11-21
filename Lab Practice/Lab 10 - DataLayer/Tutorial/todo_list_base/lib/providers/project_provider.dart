@@ -12,7 +12,10 @@ class ProjectNotifier extends AsyncNotifier<List<Project>> {
   Future<List<Project>> build() async {
     // Todo add the _todoListRepo initialization
     // Todo add the _todoListRepo.projectDao.observeProjects().listen((projects) { state = AsyncData(projects); });
-
+    _todoListRepo = await ref.watch(todoListRepoProvider.future);
+    _todoListRepo.observeProjects().listen((projects) {
+      state = AsyncData(projects);
+    });
     return []; // Initial empty state
   }
 
@@ -33,7 +36,7 @@ class ProjectNotifier extends AsyncNotifier<List<Project>> {
   }
 
   Stream<ProjectTodoStatusCounts?> getProjectTodosStatusCounts(int projectId) =>
-      _todoListRepo.getProjectTodosStatusCounts(projectId);
+      _todoListRepo.observeProjectTodoStatusCounts(projectId);
 }
 
 final projectNotifierProvider =

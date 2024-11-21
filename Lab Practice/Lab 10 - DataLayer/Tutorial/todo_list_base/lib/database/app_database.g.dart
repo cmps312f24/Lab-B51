@@ -98,12 +98,12 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Project` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `projects` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `todos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `status` TEXT NOT NULL, `priority` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `pid` INTEGER NOT NULL, FOREIGN KEY (`pid`) REFERENCES `Project` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
+            'CREATE TABLE IF NOT EXISTS `todos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `status` TEXT NOT NULL, `priority` TEXT NOT NULL, `date` TEXT NOT NULL, `time` TEXT NOT NULL, `pid` INTEGER NOT NULL, FOREIGN KEY (`pid`) REFERENCES `projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE)');
 
         await database.execute(
-            'CREATE VIEW IF NOT EXISTS `ProjectTodoStatusCounts` AS       SELECT p.id AS id,\n            IFNULL(SUM(CASE WHEN t.status = \'pending\' THEN 1 ELSE 0 END), 0) AS pendingCount,\n            IFNULL(SUM(CASE WHEN t.status = \'completed\' THEN 1 ELSE 0 END), 0) AS completedCount,\n      FROM projects p\n      LEFT JOIN todos t ON p.id = t.pid\n');
+            'CREATE VIEW IF NOT EXISTS `ProjectTodoStatusCounts` AS   SELECT \n    p.id as id, \n    IFNULL(SUM(CASE WHEN t.status = \'Pending\' THEN 1 ELSE 0 END), 0) as pendingCount,\n    IFNULL(SUM(CASE WHEN t.status = \'Completed\' THEN 1 ELSE 0 END), 0) as completedCount\n  FROM projects p\n  LEFT JOIN todos t ON p.id = t.pid\n  GROUP BY p.id\n');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -129,20 +129,20 @@ class _$ProjectDao extends ProjectDao {
   )   : _queryAdapter = QueryAdapter(database, changeListener),
         _projectInsertionAdapter = InsertionAdapter(
             database,
-            'Project',
+            'projects',
             (Project item) =>
                 <String, Object?>{'id': item.id, 'name': item.name},
             changeListener),
         _projectUpdateAdapter = UpdateAdapter(
             database,
-            'Project',
+            'projects',
             ['id'],
             (Project item) =>
                 <String, Object?>{'id': item.id, 'name': item.name},
             changeListener),
         _projectDeletionAdapter = DeletionAdapter(
             database,
-            'Project',
+            'projects',
             ['id'],
             (Project item) =>
                 <String, Object?>{'id': item.id, 'name': item.name},
@@ -178,10 +178,9 @@ class _$ProjectDao extends ProjectDao {
   }
 
   @override
-  Stream<List<ProjectTodoStatusCounts>> observeProjectTodoStatusCounts(
-      int pid) {
-    return _queryAdapter.queryListStream(
-        'SELECT * FROM ProjectTodoStatusCounts WHERE pid = ?1',
+  Stream<ProjectTodoStatusCounts?> getProjectTodosStatusCounts(int pid) {
+    return _queryAdapter.queryStream(
+        'SELECT * FROM ProjectTodoStatusCounts WHERE id = ?1',
         mapper: (Map<String, Object?> row) => ProjectTodoStatusCounts(
             id: row['id'] as int,
             pendingCount: row['pendingCount'] as int,
