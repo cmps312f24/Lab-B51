@@ -19,29 +19,60 @@ class TodoListRepo {
     });
   }
 
-  Future<Project?> getProjectById(String id) =>projectRef.doc(id).get().then((snapshot) {
+  Future<Project?> getProjectById(String id) =>
+      projectRef.doc(id).get().then((snapshot) {
         return Project.fromMap(snapshot.data() as Map<String, dynamic>);
       });
 
-  Future<void> addProject(Project project) => projectRef.add(project.toMap());
+  Future<void> addProject(Project project) async {
+    var docId =
+        projectRef.doc().id; //will create an empty document with a unique id
+    project.id = docId;
+    await projectRef.doc(docId).set(project
+        .toMap()); //it will add a new document if the doc does not exit or update if it exists
+  }
 
-  Future<void> updateProject(Project project) => projectRef.doc(project.id).update(project.toMap());
+  Future<void> updateProject(Project project) =>
+      projectRef.doc(project.id).update(project.toMap());
 
-  Future<void> deleteProject(Project project) => projectRef.doc(project.id).delete();
-
+  Future<void> deleteProject(Project project) async {
+    await projectRef.doc(project.id).delete();
+    //delete all todos associated with the project
+    await todoRef.where('pid', isEqualTo: project.id).get().then((snapshot) {
+      for (var doc in snapshot.docs) {
+        // doc.reference.delete();
+        todoRef.doc(doc.id).delete();
+      }
+    });
+  }
   // todos
 
-  Stream<List<Todo>> observeTodos(String projectId);
+  Stream<List<Todo>> observeTodos(String projectId) {
+    return todoRef
+        .where('pid', isEqualTo: projectId)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Todo.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+    });
+  }
 
   Future<Todo> getTodoById(String id) async {
     final snapshot = await todoRef.doc(id).get();
     return Todo.fromMap(snapshot.data() as Map<String, dynamic>);
   }
 
-  Future<void> addTodo(Todo todo);
+  Future<void> addTodo(Todo todo) async {
+    var docId = todoRef.doc().id;
+    todo.id = docId;
+    await todoRef.doc(docId).set(todo.toMap());
+  }
 
-  Future<void> updateTodo(Todo todo);
-  Future<void> deleteTodo(Todo todo);
+  Future<void> updateTodo(Todo todo) =>
+      todoRef.doc(todo.id).update(todo.toMap());
+  Future<void> deleteTodo(Todo todo) => todoRef.doc(todo.id).delete();
+
   Stream<ProjectTodoStatusCounts?> getProjectTodosStatusCounts(
           String projectId) =>
       todoRef.where('pid', isEqualTo: projectId).snapshots().map((snapshot) {
