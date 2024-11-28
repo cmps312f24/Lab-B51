@@ -4,7 +4,11 @@ import 'package:todo_list/repo/todo_repo.dart';
 
 final todoListRepoProvider = FutureProvider<TodoListRepo>((ref) async {
   // TODO initialize Firestore db
-  // return TodoListRepo Instance
+  var db = FirebaseFirestore.instance;
+  return TodoListRepo(
+    projectRef: db.collection('projects'),
+    todoRef: db.collection('todos'),
+  );
 });
 
 final selectedProjectIdProvider = StateProvider<String?>((ref) => null);

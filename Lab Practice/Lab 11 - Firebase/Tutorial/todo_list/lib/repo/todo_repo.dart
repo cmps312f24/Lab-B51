@@ -11,13 +11,23 @@ class TodoListRepo {
   TodoListRepo({required this.projectRef, required this.todoRef});
 
   // projects
-  Stream<List<Project>> observeProjects();
-  Future<Project?> getProjectById(String id);
-  Future<void> addProject(Project project);
+  Stream<List<Project>> observeProjects() {
+    return projectRef.snapshots().map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Project.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+    });
+  }
 
-  Future<void> updateProject(Project project);
+  Future<Project?> getProjectById(String id) =>projectRef.doc(id).get().then((snapshot) {
+        return Project.fromMap(snapshot.data() as Map<String, dynamic>);
+      });
 
-  Future<void> deleteProject(Project project);
+  Future<void> addProject(Project project) => projectRef.add(project.toMap());
+
+  Future<void> updateProject(Project project) => projectRef.doc(project.id).update(project.toMap());
+
+  Future<void> deleteProject(Project project) => projectRef.doc(project.id).delete();
 
   // todos
 

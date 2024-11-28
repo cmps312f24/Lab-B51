@@ -5,7 +5,10 @@ class Project {
   Project(this.id, this.name);
 
   factory Project.fromMap(Map<String, dynamic> json) {
-    return Project(json['id'], json['name']);
+    return Project(
+      json['id'],
+      json['name'],
+    );
   }
 
   Map<String, dynamic> toMap() {
